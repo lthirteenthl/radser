@@ -21,14 +21,15 @@ class UnetmapAuthStorage(object):
     if conn:
       with conn.lock:
         try:
-          cu = conn.cursor(MySQLdb.cursors.DictCursor)
+          #cu = conn.cursor(MySQLdb.cursors.DictCursor)
+          cu = conn.cursor()
           ldbg("storage module. Function GetDict. post conn.cursor => %s " % cu)
           ldbg("query => %s " % query)
           ldbg("params => %s " % params)
           ldbg('SQL REQUEST: %s' % query % params)
           cur = cu.execute(query, (params,))
-          ldbg("storage module. Function GetDict. post execute query cu: %s" % type(cur))
-          return cur.fetchall()
+          ldbg("storage module. Function GetDict. post execute query cu [type:%s ; value: %s]" % (type(cur), str(cur)))
+          return cur.fetchone()
         except MySQLdb.Error, e:
           ldbg("hello! I'm here!")
           lerr("FAILED: %s" % e)
