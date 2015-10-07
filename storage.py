@@ -13,40 +13,21 @@ class UnetmapAuthStorage(object):
     self.engine.Connect()
 
   def getDict(self, query, params):
-    ldbg("storage module. Function getDict")
-    ldbg("storage module. query => %s | params => %s " % (query, params))
+    #ldbg("storage module. Function getDict")
+    #ldbg("storage module. query => %s | params => %s " % (query, params))
     conn = self.engine.Connect()
-    ldbg("storage module. Function GetDict. post engine.Connect")
-    ldbg("storage module. Function GetDict. print conn => %s " % conn)
-    """if conn:
+    #ldbg("storage module. Function GetDict. post engine.Connect")
+    #ldbg("storage module. Function GetDict. print conn => %s " % conn)
+    if conn:
       with conn.lock:
         try:
-          #cu = conn.cursor(MySQLdb.cursors.DictCursor)
-          cu = conn.cursor()
-          ldbg("storage module. Function GetDict. post conn.cursor => %s " % cu)
-          ldbg("query => %s " % query)
-          ldbg("params => %s " % params)
-          ldbg('SQL REQUEST: %s' % query % params)
-          cur = cu.execute(query)
-          cur = cu.
-          ldbg("storage module. Function GetDict. post execute query cu [type:%s ; value: %s]" % (type(cur), str(cur)))
-          return cur.fetchone()
+          cur = conn.cursor(MySQLdb.cursors.DictCursor)
+          cur.execute(query, (params,))
+          #ldbg("storage module. Function GetDict. post execute query cu [type:%s ; value: %s]" % (type(cur), str(cur)))
+          return cur.fetchall()
         except MySQLdb.Error, e:
           ldbg("hello! I'm here!")
           lerr("FAILED: %s" % e)
-    """
-    if conn:
-      try:
-        cur = conn.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute(query, (params,))
-        ldbg("storage module. Function GetDict. post execute query cu [type:%s ; value: %s]" % (type(cur), str(cur)))
-        return cur.fetchall()
-      except MySQLdb.Error, e:
-        ldbg("hello! I'm here!")
-        lerr("FAILED: %s" % e)
-
-
-
 
 
   def getMetaDset(self, exnum, addr, id, sgid, default_addr):
