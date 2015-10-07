@@ -76,7 +76,7 @@ class UnetmapAuthStorage(object):
     if conn:
       with conn.lock:
         cu = conn.cursor()
-        cu.execute(query, 'as5350')
+        cu.execute(query, ('as5350',))
         return cu.fetchall()[0][0]
 
   def makeDset(self, set, default_addr=None):
@@ -179,7 +179,7 @@ class AcctStorage(object):
       with conn.lock:
         cu = conn.cursor()
         try:
-          cu.execute(query, data)
+          cu.execute(query, (data,))
           return 1
         except MySQLdb.Error, e:
           lerr(e)
