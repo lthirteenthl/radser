@@ -45,7 +45,7 @@ class Auth(object):
       num = dst[1:]
     else:
       num = dst
-
+    linfo("AuthInvite. Before storage.GetDset")
     dset = self.storage.GetDset(num, proxy_address)
     linfo("AuthInvite. After storage.GetDset")
     if not dset and dst[0] == '9':
