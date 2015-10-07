@@ -18,7 +18,7 @@ class UnetmapAuthStorage(object):
     conn = self.engine.Connect()
     ldbg("storage module. Function GetDict. post engine.Connect")
     ldbg("storage module. Function GetDict. print conn => %s " % conn)
-    if conn:
+    """if conn:
       with conn.lock:
         try:
           #cu = conn.cursor(MySQLdb.cursors.DictCursor)
@@ -27,12 +27,24 @@ class UnetmapAuthStorage(object):
           ldbg("query => %s " % query)
           ldbg("params => %s " % params)
           ldbg('SQL REQUEST: %s' % query % params)
-          cur = cu.execute(query, (params,))
+          cur = cu.execute(query)
+          cur = cu.
           ldbg("storage module. Function GetDict. post execute query cu [type:%s ; value: %s]" % (type(cur), str(cur)))
           return cur.fetchone()
         except MySQLdb.Error, e:
           ldbg("hello! I'm here!")
           lerr("FAILED: %s" % e)
+    """
+    if conn:
+      try:
+        cur = conn.cursor()
+        cur.execute(query, (params,))
+        return cur.fetchall()
+      except MySQLdb.Error, e:
+        ldbg("hello! I'm here!")
+        lerr("FAILED: %s" % e)
+
+
 
 
 
@@ -121,7 +133,7 @@ class UnetmapAuthStorage(object):
 
   def GetGWCreds(self, user):
     ldbg("storage module. Function GetGWCreds")
-    query = "SELECT SG.password AS password FROM phones_servergroup AS SG WHERE SG.name = %s LIMIT 1"
+    query = "SELECT SG.password AS password FROM phones_servergroup AS SG WHERE SG.name = %s LIMIT 1" % user
     ldbg("storage module. Function GetGWCreds. get query => %s and user => %s " % (query,user))
     r = self.getDict(query, user)
     ldbg("storage module. Funtion GetGWCreds. post function self.getDict")
