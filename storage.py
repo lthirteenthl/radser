@@ -5,6 +5,7 @@ from utils import lerr, ldbg
 from utils import URISet
 import db
 
+
 class UnetmapAuthStorage(object):
   def __init__(self, config):
     self.engine = db.Engine()
@@ -20,24 +21,18 @@ class UnetmapAuthStorage(object):
     if conn:
       with conn.lock:
         try:
-	  cu = conn.cursor(MySQLdb.cursors.DictCursor)
-	  ldbg("storage module. Function GetDict. post conn.cursor => %s " % cu)
-	  ldbg("query => %s " % query)
-	  ldbg("params => %s " % params)
-	  params = "cropotest"
-	  kekcu = cu.execute(query, [params,])
-	  ldbg("storage module. Function GetDict. post execute query cu => %s " % kekcu)
-#	  kekdb = cu.fetchall()
-#          kekdb = kekcu.fetchall()
-	  ldbg(str(kekcu))
-          return kekcu.fetchall()
-
-###          return cu.fetchall()
-#	  ldbg("result cu.fetchall => %s " % kekdb )
-#	  return kekdb
+          cu = conn.cursor(MySQLdb.cursors.DictCursor)
+          ldbg("storage module. Function GetDict. post conn.cursor => %s " % cu)
+          ldbg("query => %s " % query)
+          ldbg("params => %s " % params)
+          cur = cu.execute(query, (params,))
+          ldbg("storage module. Function GetDict. post execute query cu: %s" % cur)
+          return cur.fetchall()
         except MySQLdb.Error, e:
-	  ldbg("hello! I'm here!")
+          ldbg("hello! I'm here!")
           lerr("FAILED: %s" % e)
+
+
 
   def getMetaDset(self, exnum, addr, id, sgid, default_addr):
     query = """
@@ -172,6 +167,7 @@ class UnetmapAuthStorage(object):
       return dset
     else:
       lerr("FAIL: couldn't get gateway address")
+
 
 class AcctStorage(object):
   def __init__(self, config):
