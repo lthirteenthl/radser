@@ -25,6 +25,7 @@ class UnetmapAuthStorage(object):
           ldbg("storage module. Function GetDict. post conn.cursor => %s " % cu)
           ldbg("query => %s " % query)
           ldbg("params => %s " % params)
+          ldbg('SQL REQUEST: %s' % query % params)
           cur = cu.execute(query, (params,))
           ldbg("storage module. Function GetDict. post execute query cu: %s" % type(cur))
           return cur.fetchall()
@@ -122,7 +123,7 @@ class UnetmapAuthStorage(object):
     query = """
       SELECT SG.password AS password
       FROM phones_servergroup AS SG
-      WHERE SG.name = %s
+      WHERE SG.name = '%s'
       LIMIT 1
     """
     ldbg("storage module. Function GetGWCreds. get query => %s and user => %s " % (query,user))
