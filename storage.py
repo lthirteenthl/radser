@@ -134,8 +134,8 @@ class UnetmapAuthStorage(object):
 
   def GetGWCreds(self, user):
     ldbg("storage module. Function GetGWCreds")
-    query = "SELECT SG.password AS password FROM phones_servergroup AS SG WHERE SG.name = %s LIMIT 1" % user
-    ldbg("storage module. Function GetGWCreds. get query => %s and user => %s " % (query,user))
+    query = "SELECT SG.password AS password FROM phones_servergroup AS SG WHERE SG.name = %s LIMIT 1"
+    ldbg("storage module. Function GetGWCreds. get query => %s and user => %s " % (query, user))
     r = self.getDict(query, user)
     ldbg("storage module. Funtion GetGWCreds. post function self.getDict")
     if len(r):
