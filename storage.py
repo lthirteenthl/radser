@@ -26,7 +26,7 @@ class UnetmapAuthStorage(object):
           ldbg("query => %s " % query)
           ldbg("params => %s " % params)
           cur = cu.execute(query, (params,))
-          ldbg("storage module. Function GetDict. post execute query cu: %s" % cur)
+          ldbg("storage module. Function GetDict. post execute query cu: %s" % type(cur))
           return cur.fetchall()
         except MySQLdb.Error, e:
           ldbg("hello! I'm here!")
