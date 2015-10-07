@@ -47,7 +47,7 @@ class Auth(object):
       num = dst
 
     dset = self.storage.GetDset(num, proxy_address)
-
+    linfo("AuthInvite. After storage.GetDset")
     if not dset and dst[0] == '9':
       dset = self.storage.GetGatewayDset(num)
       creds = self.storage.GetUserCreds(src)
