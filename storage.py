@@ -1,7 +1,7 @@
 from __future__ import with_statement
 from datetime import datetime
 import MySQLdb
-from utils import lerr, ldbg
+from utils import lerr, ldbg, linfo
 from utils import URISet
 import db
 
@@ -13,17 +13,20 @@ class UnetmapAuthStorage(object):
     self.engine.Connect()
 
   def getDict(self, query, params):
-    #ldbg("storage module. Function getDict")
-    #ldbg("storage module. query => %s | params => %s " % (query, params))
+    linfo("storage module. Function getDict")
+    linfo("storage module. query => %s | params => %s | type of params => %s " % (query, params, str(type(params))))
     conn = self.engine.Connect()
     #ldbg("storage module. Function GetDict. post engine.Connect")
-    #ldbg("storage module. Function GetDict. print conn => %s " % conn)
+    linfo("storage module. Function GetDict. print conn => %s " % conn)
     if conn:
       with conn.lock:
         try:
           cur = conn.cursor(MySQLdb.cursors.DictCursor)
-          cur.execute(query, (params,))
-          #ldbg("storage module. Function GetDict. post execute query cu [type:%s ; value: %s]" % (type(cur), str(cur)))
+	  if type(params)==type(()):
+	    cur.execute(query, params)
+	  else:
+            cur.execute(query, (params,))
+          linfo("storage module. Function GetDict. post execute query cu [type:%s ; value: %s]" % (type(cur), str(cur)))
           return cur.fetchall()
         except MySQLdb.Error, e:
           ldbg("hello! I'm here!")
@@ -179,7 +182,7 @@ class AcctStorage(object):
       with conn.lock:
         cu = conn.cursor()
         try:
-          cu.execute(query, (data,))
+          cu.execute(query, data)
           return 1
         except MySQLdb.Error, e:
           lerr(e)

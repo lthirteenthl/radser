@@ -65,6 +65,7 @@ class Auth(object):
       reply['Reply-Message'] = "Dset fail"
     else:
       linfo("ACCEPT: '%s' call to '%s'" % (src, str(dset)))
+      linfo("dset => %s | rpid => %s" % (str(dset), str(rpid)))
       reply['Sip-Avp'] = MakeAVP(dset, rpid)
     return MakePacket(radiusd.RLM_MODULE_OK, reply, config)
 
@@ -73,6 +74,7 @@ class Acct(object):
     self.storage = storage
 
   def Account(self, d):
+    ldbg("mod. radser. class Acct. begin def Account")
     if self.storage.Insert(d):
       return radiusd.RLM_MODULE_OK
     lerr("FAIL: Couldn't account call")
@@ -116,11 +118,13 @@ def accounting(data):
   ldbg("accounting packet: %s" % str(data))
 
   d = utils.RadPacketToDict(data)
+  ldbg("mod. radser. fun. acc. post utils.RadPacketToDict")
 
   if ('Service-Type' not in d) or (d['Service-Type'] != 'Sip-Session'):
     linfo("Service-Type is not Sip-Session, noop")
     return radiusd.RLM_MODULE_NOOP
 
+  ldbg("mod. radser. fun. acc. before return value of function")
   return acct.Account(d)
 
 def authorize(data):
