@@ -10,13 +10,13 @@ class Auth(object):
     self.storage = storage
 
   def Authorize(self, user):
-    ldbg("Class Auth. Function Authorize")
-    ldbg("Variable's user -> %s" % user)
+###    ldbg("Class Auth. Function Authorize")
+###    ldbg("Variable's user -> %s" % user)
     reply = {}
     config = {}
 
     creds = self.storage.GetGWCreds(user)
-    ldbg("Class Auth. Function Authorize. post get creds")
+###    ldbg("Class Auth. Function Authorize. post get creds")
     if not creds:
       creds = self.storage.GetUserCreds(user)
       if not creds:
@@ -45,9 +45,9 @@ class Auth(object):
       num = dst[1:]
     else:
       num = dst
-    linfo("AuthInvite. Before storage.GetDset")
+###    linfo("AuthInvite. Before storage.GetDset")
     dset = self.storage.GetDset(num, proxy_address)
-    linfo("AuthInvite. After storage.GetDset")
+###    linfo("AuthInvite. After storage.GetDset")
     if not dset and dst[0] == '9':
       dset = self.storage.GetGatewayDset(num)
       creds = self.storage.GetUserCreds(src)
@@ -74,7 +74,7 @@ class Acct(object):
     self.storage = storage
 
   def Account(self, d):
-    ldbg("mod. radser. class Acct. begin def Account")
+###    ldbg("mod. radser. class Acct. begin def Account")
     if self.storage.Insert(d):
       return radiusd.RLM_MODULE_OK
     lerr("FAIL: Couldn't account call")
@@ -118,41 +118,41 @@ def accounting(data):
   ldbg("accounting packet: %s" % str(data))
 
   d = utils.RadPacketToDict(data)
-  ldbg("mod. radser. fun. acc. post utils.RadPacketToDict")
+###  ldbg("mod. radser. fun. acc. post utils.RadPacketToDict")
 
   if ('Service-Type' not in d) or (d['Service-Type'] != 'Sip-Session'):
     linfo("Service-Type is not Sip-Session, noop")
     return radiusd.RLM_MODULE_NOOP
 
-  ldbg("mod. radser. fun. acc. before return value of function")
+###  ldbg("mod. radser. fun. acc. before return value of function")
   return acct.Account(d)
 
 def authorize(data):
   ldbg("authorize data: %s" % str(data))
-  ldbg("function authorize")
+###  ldbg("function authorize")
   d = utils.RadPacketToDict(data)
   
-  ldbg("function authorize (d variable) => %s " % d)
+###  ldbg("function authorize (d variable) => %s " % d)
 
   if 'Service-Type' not in d:
     linfo("Service-Type is not present, noop")
-    ldbg("function authorize: Service-Type is not present")
+###    ldbg("function authorize: Service-Type is not present")
     return radiusd.RLM_MODULE_NOOP
-  ldbg("function authorize: post check Service-Type")
+###  ldbg("function authorize: post check Service-Type")
 
   if d['Service-Type'] == 'Sip-Session':
     user = d.get("User-Name")
-    ldbg("function authorize: User-Name -> %s " % user)
+###    ldbg("function authorize: User-Name -> %s " % user)
     if not user:
       lerr("FAIL: couldn't extract 'User-Name' from packet")
-      ldbg("function authorize: couldn't extract User-Name")
+###      ldbg("function authorize: couldn't extract User-Name")
       return radiusd.RLM_MODULE_FAIL
-    ldbg("function authorize: post check User-Name and Sip-Session")
+###    ldbg("function authorize: post check User-Name and Sip-Session")
     ldbg("process for get user-name by split -> %s " % user.split('@')[0])
-    kek = auth.Authorize(user.split('@')[0])
-    ldbg("function authorize: get kek -> %s " % str(kek))
-#    return auth.Authorize(user.split('@')[0])
-    return kek
+###    kek = auth.Authorize(user.split('@')[0])
+###    ldbg("function authorize: get kek -> %s " % str(kek))
+    return auth.Authorize(user.split('@')[0])
+###    return kek
 
   linfo("Unknown Service-Type")
   return radiusd.RLM_MODULE_NOOP
@@ -160,7 +160,7 @@ def authorize(data):
 def authenticate(data):
   '''using as Post-Auth'''
   ldbg("authenticate data: %s" % str(data))
-  ldbg("function authenticate")
+###  ldbg("function authenticate")
   d = utils.RadPacketToDict(data)
 
   if 'Service-Type' not in d:
